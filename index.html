@@ -1,165 +1,298 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Svastha Outdoor</title>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svastha Outdoor | Rental Alat Gunung Lampung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .product-card:hover img { transform: scale(1.05); }
+        /* Custom scrollbar untuk keranjang */
+        #cart-items::-webkit-scrollbar { width: 4px; }
+        #cart-items::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
 
-    <!-- font family -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,300;0,400;0,700;1,700&display=swap" rel="stylesheet" />
-
-    <script src="https://unpkg.com/feather-icons"></script>
-
-    <!-- style css -->
-    <link rel="stylesheet" href="css/style.css" />
-  </head>
-  <body>
-    <!-- navbar -->
-    <nav class="navbar">
-      <a href="#" class="nav-logo">Svastha <span>Outdoor</span></a>
-
-      <div class="navbar-nav">
-        <a href="#">Home</a>
-        <a href="#about">Tentang kami</a>
-        <a href="#menu">Menu</a>
-        <a href="#contact">Contact</a>
-      </div>
-
-      <div class="navbar-ex">
-        <a href="#" id="search"><i data-feather="search"></i></a>
-        <a href="#" id="shopping-cart"><i data-feather="shopping-cart"></i></a>
-        <a href="#" id="hamburger"><i data-feather="menu"></i></a>
-      </div>
+    <nav class="fixed w-full z-50 glass border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <a href="#" class="text-2xl font-extrabold text-green-700 tracking-tight italic">SVASTHA<span class="text-orange-500">OUTDOOR</span></a>
+            <button onclick="toggleCart()" class="relative p-2 text-gray-600 hover:text-green-700 transition">
+                <i class="fa-solid fa-cart-shopping text-xl"></i>
+                <span id="cart-count" class="absolute top-0 right-0 bg-orange-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+            </button>
+        </div>
     </nav>
-    <!-- navbar end -->
 
-    <!-- hero sectiom -->
-    <section class="hero" id="home">
-      <main class="content">
-        <h1>Persiapkan peralatanmu sebelum <span>mendaki</span></h1>
-        <p>
-          Kami menyediakan perlengkapan mendaki dan camping terlengkap dengan standar keamanan tinggi. Semua alat terjamin bersih, terawat, dan siap menemani perjalanan Anda menuju puncak dengan aman dan nyaman.
-        </p>
-        <a href="http://wa.me/message/B2ZBCS5H7X7ZL1" class="booking">Booking Sekarang</a>
-      </main>
+    <section class="relative pt-32 pb-16 px-4 bg-white overflow-hidden text-center border-b border-gray-50">
+        <div class="max-w-3xl mx-auto">
+            <span class="bg-orange-100 text-orange-600 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block">Basecamp Lampung</span>
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight text-gray-800">Eksplorasi Alam Tanpa Ribet, <br><span class="text-green-600">Sewa Alatnya Disini!</span></h1>
+            <p class="text-gray-500 text-lg mb-8 leading-relaxed">Peralatan gunung lengkap, bersih, dan terpercaya. Ambil langsung di Kemiling atau Natar.</p>
+            <div class="flex justify-center gap-3">
+                <a href="#katalog" class="bg-green-700 text-white px-8 py-4 rounded-2xl font-bold hover:bg-green-800 transition shadow-lg shadow-green-100">Lihat Katalog</a>
+                <a href="https://wa.me/6281273418512" target="_blank" class="bg-gray-100 text-gray-700 px-8 py-4 rounded-2xl font-bold hover:bg-gray-200 transition">Chat Admin</a>
+            </div>
+        </div>
     </section>
-    <!-- hero section end -->
 
-    <!-- about -->
-    <section class="about" id="about">
-      <h2><span>Tentang</span> Kami</h2>
-      <div class="row">
-        <div class="about-img">
-          <img src="img/about.jpg" alt="tentang kami" />
+    <main id="katalog" class="max-w-7xl mx-auto px-4 py-16">
+        <div class="flex items-center justify-between mb-10">
+            <div>
+                <h2 class="text-2xl font-extrabold text-gray-800">Katalog Alat</h2>
+                <p class="text-sm text-gray-400">Pilih alat sesuai kebutuhan pendakianmu</p>
+            </div>
+            <div class="h-1 w-16 bg-green-600 rounded-full"></div>
         </div>
-        <div class="content-about">
-          <h3>Kenapa memilih kami ?</h3>
-          <p>Kami menjamin setiap peralatan yang Anda sewa dalam kondisi prima. Tenda, sleeping bag, dan carrier selalu dicuci bersih dan disterilkan setelah pemakaian, sehingga Anda bisa beristirahat dengan nyaman dan higienis tanpa rasa khawatir.</p>
-          <p>Nikmati petualangan seru tanpa harus menguras dompet. Svastha Outdoor menawarkan harga sewa yang kompetitif dan terjangkau untuk semua kalangan.</p>
-          <p>Tidak perlu bingung memilih alat. Tim kami siap memberikan konsultasi gratis untuk memastikan Anda membawa perlengkapan yang tepat sesuai destinasi. Proses booking mudah, dan cepat.</p>
-        </div>
-      </div>
-    </section>
-    <!-- about end -->
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8" id="product-grid">
+            </div>
+    </main>
 
-    <!-- menu section -->
-    <section class="menu" id="menu">
-      <h2><span>Rental</span> Kami</h2>
-      <p>Bingung mau bawa apa? Cek katalog lengkap kami di bawah ini! Kami menyewakan peralatan outdoor satuan maupun paket hemat yang siap menemani petualanganmu.</p>
-      <div class="row">
-        <div class="menu-card">
-          <img src="img/pakettektok.jpeg" alt="Kompor portable" class="menu-card-img" />
-          <h3 class="menu-card-title">Paket Tektok</h3>
-          <p class="menu-card-price">Idr 50K</p>
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b flex justify-between items-center bg-gray-50">
+            <div>
+                <h2 class="font-bold text-xl text-gray-800">Detail Sewa</h2>
+                <p class="text-xs text-gray-500">Lengkapi data untuk booking alat</p>
+            </div>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-gray-800 text-3xl transition">&times;</button>
         </div>
-        <div class="menu-card">
-          <img src="img/sepatuu.jpg" alt="Kompor portable" class="menu-card-img" />
-          <h3 class="menu-card-title">-Sepatu Hiking-</h3>
-          <p class="menu-card-price">Idr 30K</p>
-        </div>
-        <div class="menu-card">
-          <img src="img/hydropackk.jpg" alt="Kompor portable" class="menu-card-img" />
-          <h3 class="menu-card-title">-Hydropack-</h3>
-          <p class="menu-card-price">Idr 15K</p>
-        </div>
-        <div class="menu-card">
-          <img src="img/trackingpole.jpg" alt="Kompor portable" class="menu-card-img" />
-          <h3 class="menu-card-title">-Tracking Pole-</h3>
-          <p class="menu-card-price">Idr 10K</p>
-        </div>
-        <div class="menu-card">
-          <img src="img/headlamp.jpg" alt="Kompor portable" class="menu-card-img" />
-          <h3 class="menu-card-title">-Headlamp-</h3>
-          <p class="menu-card-price">Idr 5K</p>
-        </div>
-        <div class="menu-card">
-          <img src="img/Daypackconsina.jpg" alt="Kompor portable" class="menu-card-img" />
-          <h3 class="menu-card-title">-Daypack Consina 30L-</h3>
-          <p class="menu-card-price">Idr 50K</p>
-        </div>
-      </div>
-    </section>
-    <!-- menu section end -->
+        
+        <div class="flex-1 overflow-y-auto p-5 space-y-6" id="cart-content">
+            <div id="cart-items" class="space-y-3">
+                <p class="text-center text-gray-400 text-sm py-10">Keranjang masih kosong...</p>
+            </div>
 
-    <!-- kontak  -->
-    <section class="contact" id="contact">
-      <h2><span>Kontak</span> Kami</h2>
-      <p>Jl. Beringin 4 No.10, Beringin Raya, Kec. Kemiling, Kota Bandar Lampung, Lampung 35158</p>
-      <div class="row">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d178.11317913011587!2d105.2001893664352!3d-5.394074945922633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2sid!4v1765375716491!5m2!1sen!2sid"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          class="map"
-        ></iframe>
+            <div class="bg-gray-50 p-5 rounded-3xl space-y-4 border border-gray-100">
+                <h3 class="text-xs font-bold text-green-700 uppercase tracking-widest flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-id-card"></i> Identitas Penyewa
+                </h3>
+                
+                <div class="space-y-3">
+                    <input type="text" id="nama" placeholder="Nama Lengkap sesuai KTP" class="w-full p-3.5 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500 bg-white">
+                    
+                    <select id="lokasi" class="w-full p-3.5 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500 bg-white text-gray-500 font-semibold">
+                        <option value="">Pilih Tempat Pengambilan</option>
+                        <option value="Kemiling">Area Kemiling</option>
+                        <option value="Natar">Area Natar</option>
+                    </select>
 
-        <form action="">
-          <div class="input-grup">
-            <i data-feather="user"></i>
-            <input type="text" placeholder="nama" />
-          </div>
-          <div class="input-grup">
-            <i data-feather="mail"></i>
-            <input type="text" placeholder="email" />
-          </div>
-          <div class="input-grup">
-            <i data-feather="phone"></i>
-            <input type="text" placeholder="no hp" />
-          </div>
-          <button type="submit" class="btn">kirim pesan</button>
-        </form>
-      </div>
-    </section>
-    <!-- kontak end -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 ml-2 uppercase">Tanggal Ambil</label>
+                            <input type="date" id="tgl-ambil" class="w-full p-3 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-gray-400 ml-2 uppercase">Jam Ambil</label>
+                            <input type="time" id="jam-ambil" class="w-full p-3 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                    </div>
 
-    <!-- footer -->
-    <footer>
-      <div class="sosial">
-        <a href="https://www.instagram.com/svasthaoutdoor/"><i data-feather="instagram"></i></a>
-        <a href="https://www.tiktok.com/@svastha.outdoor"><i data-feather="music"></i></a>
-      </div>
-      <div class="link">
-        <a href="#home">Home</a>
-        <a href="#about">Tentang kami</a>
-        <a href="#menu">Menu</a>
-        <a href="#contact">Kontak</a>
-      </div>
-      <div class="credit">
-        <p>Created by <a href="">Svastha Outdoor</a> | &copy; 2025</p>
-      </div>
-    </footer>
-    <!-- footer end -->
+                    <div class="space-y-1">
+                        <label class="text-[10px] font-bold text-gray-400 ml-2 uppercase">Lama Sewa (Hari)</label>
+                        <input type="number" id="durasi" min="1" value="1" oninput="updateCart()" class="w-full p-3.5 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
 
-    <!-- feather icons -->
+                    <textarea id="alamat" rows="2" placeholder="Alamat Lengkap (Domisili)" class="w-full p-3.5 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500 bg-white"></textarea>
+                    
+                    <input type="text" id="sosmed" placeholder="Username IG / Facebook Aktif" class="w-full p-3.5 border border-gray-200 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-green-500 bg-white">
+                </div>
+            </div>
+
+            <div class="bg-blue-50 p-5 rounded-3xl border border-blue-100 space-y-3">
+                <div class="flex items-center gap-2 text-blue-700">
+                    <i class="fa-solid fa-shield-check"></i>
+                    <h4 class="text-xs font-bold uppercase tracking-wider">Garansi Booking</h4>
+                </div>
+                <p class="text-[11px] text-blue-600 leading-relaxed">
+                    Wajib membayar <strong>DP minimal 50%</strong> untuk mengamankan stok alat pada tanggal yang dipilih.
+                </p>
+                <div class="bg-white/80 p-3 rounded-2xl border border-blue-200 flex justify-between items-center">
+                    <div>
+                        <p class="text-[9px] text-blue-400 font-bold uppercase">SeaBank Indonesia</p>
+                        <p class="text-sm font-bold text-blue-900 tracking-wider">901692635388</p>
+                    </div>
+                    <button class="text-blue-600 text-xs font-bold px-3 py-1 bg-blue-50 rounded-lg hover:bg-blue-100 transition">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6 border-t bg-white space-y-4">
+            <div class="flex justify-between items-end">
+                <span class="text-gray-400 text-sm">Total Estimasi</span>
+                <span id="cart-total" class="font-extrabold text-3xl text-green-700 leading-none text-right">Rp 0</span>
+            </div>
+            <button onclick="sendWhatsApp()" class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-green-100">
+                <i class="fa-brands fa-whatsapp text-xl"></i> Kirim Pesanan ke WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="overlay" onclick="toggleCart()" class="fixed inset-0 bg-black/50 z-[55] hidden backdrop-blur-sm transition-all"></div>
+
     <script>
-      feather.replace();
-    </script>
+        // DATA KATALOG
+        const products = [
+            { id: 1, name: "Paket Tektok", price: 50000, img: "img/pakettektok.jpeg", desc: "Sepatu + Jaket + Headlamp", hasSize: true },
+            { id: 2, name: "Sepatu Rubtrack", price: 30000, img: "img/sepatuu.jpg", desc: "Anti slip & kuat", hasSize: true },
+            { id: 3, name: "Consina Venial 30L", price: 50000, img: "img/Daypackconsina.jpg", desc: "Carrier ultralight", hasSize: false },
+            { id: 4, name: "Hydropack Boogaaboo", price: 15000, img: "img/hydropackk.jpg", desc: "Tas air minum mendaki", hasSize: false },
+            { id: 5, name: "Tracking Pole", price: 10000, img: "img/trackingpole.jpg", desc: "Alumunium alloy", hasSize: false },
+            { id: 6, name: "Nesting + Kompor", price: 25000, img: "https://cf.shopee.co.id/file/494b59fc1df755904160ecd0abe1754b", desc: "Set masak outdoor", hasSize: false },
+            { id: 7, name: "Jaket Gunung", price: 30000, img: "https://images.tokopedia.net/img/cache/500-square/aphluv/1997/1/1/5f5836bc25b44f6a9d19688b2151a23f~.jpeg", desc: "Windproof & waterproof", hasSize: false }
+        ];
 
-    <!-- javascript -->
-    <script src="js/script.js"></script>
-  </body>
+        let cart = [];
+
+        // RENDER KATALOG KE HALAMAN
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white p-3 rounded-3xl border border-gray-100 shadow-sm flex flex-col product-card transition-all duration-300">
+                    <div class="relative overflow-hidden rounded-2xl h-44 mb-4">
+                        <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover transition-transform duration-700">
+                        <span class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-lg text-[10px] font-bold shadow-sm">Ready</span>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-sm mb-1 px-1">${p.name}</h3>
+                    <p class="text-[11px] text-gray-400 mb-4 px-1 leading-relaxed">${p.desc}</p>
+                    
+                    ${p.hasSize ? `
+                    <select id="size-${p.id}" class="mb-4 w-full p-2.5 text-xs border border-gray-100 rounded-xl bg-gray-50 outline-none focus:ring-1 focus:ring-green-500 cursor-pointer">
+                        <option value="">Pilih Ukuran</option>
+                        ${[37,38,39,40,41,42,43].map(s => `<option value="${s}">Size ${s}</option>`).join('')}
+                    </select>
+                    ` : '<div class="mb-4 h-[38px]"></div>'}
+
+                    <div class="mt-auto flex items-center justify-between p-1">
+                        <div>
+                            <span class="text-[9px] text-gray-400 block font-bold uppercase tracking-tighter">Harga /Hari</span>
+                            <span class="font-extrabold text-green-700 text-base italic">Rp ${p.price.toLocaleString()}</span>
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="bg-green-700 text-white w-10 h-10 rounded-2xl hover:bg-orange-500 transition-all shadow-lg shadow-green-100 active:scale-90">
+                            <i class="fa-solid fa-plus text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const overlay = document.getElementById('overlay');
+            drawer.classList.toggle('translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            let size = "";
+            if (product.hasSize) {
+                size = document.getElementById(`size-${id}`).value;
+                if (!size) return alert("Silakan pilih ukuran sepatu terlebih dahulu!");
+            }
+            cart.push({ ...product, selectedSize: size });
+            updateCart();
+            // Efek feedback
+            const btn = event.currentTarget;
+            btn.innerHTML = '<i class="fa-solid fa-check text-xs"></i>';
+            btn.classList.replace('bg-green-700', 'bg-orange-500');
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fa-solid fa-plus text-xs"></i>';
+                btn.classList.replace('bg-orange-500', 'bg-green-700');
+            }, 1000);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function updateCart() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const container = document.getElementById('cart-items');
+            const durasi = parseInt(document.getElementById('durasi').value) || 1;
+            
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 text-sm py-10">Keranjang masih kosong...</p>`;
+                document.getElementById('cart-total').innerText = "Rp 0";
+                return;
+            }
+
+            let totalHarian = cart.reduce((sum, item) => sum + item.price, 0);
+            let totalAkhir = totalHarian * durasi;
+
+            container.innerHTML = cart.map((item, index) => `
+                <div class="flex items-center gap-4 bg-gray-50 p-4 rounded-3xl border border-gray-100 transition-all hover:bg-white hover:shadow-sm">
+                    <img src="${item.img}" class="w-14 h-14 object-cover rounded-2xl shadow-sm border border-white">
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm text-gray-800">${item.name}</h4>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase">${item.selectedSize ? 'Ukuran: ' + item.selectedSize : 'Outdoor Gear'}</p>
+                        <p class="text-xs font-extrabold text-green-700">Rp ${item.price.toLocaleString()}</p>
+                    </div>
+                    <button onclick="removeFromCart(${index})" class="text-gray-300 hover:text-red-500 p-2 transition">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            document.getElementById('cart-total').innerText = `Rp ${totalAkhir.toLocaleString()}`;
+        }
+
+        function sendWhatsApp() {
+            const nama = document.getElementById('nama').value;
+            const lokasi = document.getElementById('lokasi').value;
+            const tgl = document.getElementById('tgl-ambil').value;
+            const jam = document.getElementById('jam-ambil').value;
+            const durasi = document.getElementById('durasi').value;
+            const alamat = document.getElementById('alamat').value;
+            const sosmed = document.getElementById('sosmed').value;
+            const totalStr = document.getElementById('cart-total').innerText;
+            
+            // Hitung DP 50%
+            const totalAngka = cart.reduce((sum, item) => sum + item.price, 0) * (parseInt(durasi) || 1);
+            const dp = totalAngka * 0.5;
+
+            if (!nama || !lokasi || !tgl || !jam || !durasi || !alamat || !sosmed || cart.length === 0) {
+                return alert("Mohon lengkapi formulir penyewa dan pilih minimal 1 alat.");
+            }
+
+            const noWA = "6281273418512"; 
+            let list = cart.map(i => `- ${i.name} ${i.selectedSize ? '(Size ' + i.selectedSize + ')' : ''}`).join('%0A');
+
+            const text = `*FORM SEWA SVASTHA OUTDOOR*%0A` +
+                         `------------------------------------%0A%0A` +
+                         `*Data Penyewa:*%0A` +
+                         `👤 Nama: ${nama}%0A` +
+                         `📍 Ambil di: ${lokasi}%0A` +
+                         `📅 Tanggal: ${tgl}%0A` +
+                         `⏰ Jam: ${jam}%0A` +
+                         `⏳ Durasi: ${durasi} Hari%0A` +
+                         `🏠 Alamat: ${alamat}%0A` +
+                         `📱 Sosmed: ${sosmed}%0A%0A` +
+                         `*Daftar Alat:*%0A${list}%0A%0A` +
+                         `*TOTAL:* *${totalStr}*%0A` +
+                         `*DP BOOKING (50%):* *Rp ${dp.toLocaleString()}*%0A%0A` +
+                         `------------------------------------%0A` +
+                         `*Info Pembayaran DP:*%0A` +
+                         `🏦 Bank: SEABANK%0A` +
+                         `🔢 No. Rek: 901692635388%0A` +
+                         `------------------------------------%0A` +
+                         `_Mohon kirimkan bukti transfer setelah pesan ini agar alat segera dibooking._`;
+
+            window.open(`https://wa.me/${noWA}?text=${text}`, '_blank');
+        }
+
+        // Jalankan render awal
+        renderProducts();
+        
+        // Atur tanggal minimal adalah hari ini
+        const tglInput = document.getElementById('tgl-ambil');
+        const today = new Date().toISOString().split('T')[0];
+        tglInput.setAttribute('min', today);
+    </script>
+</body>
 </html>
