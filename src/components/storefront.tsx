@@ -17,7 +17,7 @@ type BookingForm = {
   address: string;
   social: string;
 };
-type Payment = { orderId: string; total: number; deposit: number };
+type BookingConfirmation = { reference: string; total: number; whatsappUrl: string };
 
 const emptyForm: BookingForm = {
   name: "", phone: "", email: "", location: "", date: "", time: "",
@@ -38,37 +38,17 @@ export default function Storefront() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [payment, setPayment] = useState<Payment | null>(null);
-  const [paymentStatus, setPaymentStatus] = useState("");
+  const [booking, setBooking] = useState<BookingConfirmation | null>(null);
 
   const total = useMemo(
     () => cart.reduce((sum, line) => sum + line.product.price * line.quantity, 0) * form.days,
     [cart, form.days],
   );
-  const deposit = Math.ceil(total / 2);
   const itemCount = cart.reduce((sum, line) => sum + line.quantity, 0);
 
   useEffect(() => {
     setMinimumDate(localDateString());
   }, []);
-
-  useEffect(() => {
-    if (!payment) return;
-    let active = true;
-    const checkStatus = async () => {
-      try {
-        const response = await fetch(`/api/bookings/${payment.orderId}`, { cache: "no-store" });
-        if (!response.ok) return;
-        const data = await response.json();
-        if (active) setPaymentStatus(data.paymentStatus);
-      } catch {
-        // The QR remains available; a later poll will retry the status check.
-      }
-    };
-    void checkStatus();
-    const timer = window.setInterval(checkStatus, 5000);
-    return () => { active = false; window.clearInterval(timer); };
-  }, [payment]);
 
   function addToCart(product: Product) {
     const size = selectedSizes[product.id];
@@ -115,8 +95,7 @@ export default function Storefront() {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Pesanan belum dapat dibuat.");
-      setPayment({ orderId: result.orderId, total: result.total, deposit: result.deposit });
-      setPaymentStatus("pending");
+      setBooking({ reference: result.reference, total: result.total, whatsappUrl: result.whatsappUrl });
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Terjadi kendala saat membuat pesanan.");
     } finally {
@@ -175,7 +154,7 @@ export default function Storefront() {
         <section className="catalog-section" id="katalog">
           <div className="section-heading">
             <div><p className="eyebrow"><span /> PERLENGKAPAN PILIHAN</p><h2>Temukan gear<br />untuk langkahmu.</h2></div>
-            <p className="section-intro">Pilih perlengkapan yang kamu butuhkan. Harga sewa dihitung per hari dan DP 50% dibayar dengan QRIS.</p>
+            <p className="section-intro">Pilih perlengkapan yang kamu butuhkan. Harga sewa dihitung per hari; admin akan mengonfirmasi ketersediaan dan pembayaran lewat WhatsApp.</p>
           </div>
           <div className="product-grid">
             {products.map((product, index) => (
@@ -225,14 +204,13 @@ export default function Storefront() {
 
       {drawerOpen && <div className="drawer-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setDrawerOpen(false); }}>
         <aside className="booking-drawer" role="dialog" aria-modal="true" aria-label="Keranjang dan formulir penyewaan">
-          <div className="drawer-top"><div><p className="eyebrow"><span /> BOOKING PERLENGKAPAN</p><h2>{payment ? "Pembayaran DP" : "Detail sewa"}</h2></div><button type="button" className="close-button" onClick={() => setDrawerOpen(false)} aria-label="Tutup keranjang">×</button></div>
-          {payment ? <div className="payment-panel">
-            <p className="payment-intro">Pindai kode QR dengan aplikasi bank atau e-wallet yang mendukung QRIS.</p>
-            <div className="qr-frame"><img src={`/api/bookings/${payment.orderId}/qr`} alt="Kode QRIS untuk pembayaran DP" /></div>
-            <div className="payment-amount"><span>DP booking · 50%</span><strong>{rupiah(payment.deposit)}</strong></div>
-            <p className={`payment-state ${paymentStatus === "paid" ? "is-paid" : ""}`}>{paymentStatus === "paid" ? "Pembayaran diterima. Admin akan mengonfirmasi booking." : "Menunggu pembayaran QRIS… halaman ini memeriksa status otomatis."}</p>
-            <p className="order-reference">ID booking <strong>{payment.orderId}</strong></p>
-            <button className="button button-outline full-button" type="button" onClick={() => { setPayment(null); setPaymentStatus(""); setCart([]); setForm(emptyForm); }}>Buat booking lain</button>
+          <div className="drawer-top"><div><p className="eyebrow"><span /> BOOKING PERLENGKAPAN</p><h2>{booking ? "Booking tersimpan" : "Detail sewa"}</h2></div><button type="button" className="close-button" onClick={() => setDrawerOpen(false)} aria-label="Tutup keranjang">×</button></div>
+          {booking ? <div className="confirmation-panel">
+            <p className="confirmation-intro">Detail booking sudah disimpan. Lanjutkan ke WhatsApp agar admin dapat mengonfirmasi ketersediaan alat dan informasi pembayaran.</p>
+            <div className="booking-receipt"><span>REFERENSI BOOKING</span><strong>{booking.reference}</strong><small>Estimasi sewa · {rupiah(booking.total)}</small></div>
+            <a className="button button-dark full-button" href={booking.whatsappUrl} target="_blank" rel="noreferrer">Lanjutkan ke WhatsApp <span>↗</span></a>
+            <p className="confirmation-note">Pembayaran belum dilakukan di website. Admin akan memberi petunjuk setelah mengecek booking.</p>
+            <button className="button button-outline full-button" type="button" onClick={() => { setBooking(null); setCart([]); setForm(emptyForm); }}>Buat booking lain</button>
           </div> : <>
             <div className="cart-list">
               {cart.length === 0 ? <p className="empty-cart">Keranjangmu masih kosong.<br />Pilih gear dari katalog untuk mulai.</p> : cart.map((line) => (
@@ -256,9 +234,9 @@ export default function Storefront() {
               <label>Alamat domisili<textarea required maxLength={500} rows={2} value={form.address} onChange={(event) => updateForm("address", event.target.value)} placeholder="Alamat lengkap" /></label>
               <label>Instagram / Facebook <span className="optional-label">opsional</span><input maxLength={100} value={form.social} onChange={(event) => updateForm("social", event.target.value)} placeholder="@username" /></label>
               {error && <p className="form-error" role="alert">{error}</p>}
-              <div className="estimate"><span>Estimasi total sewa</span><strong>{rupiah(total)}</strong><small>DP minimum 50% · {rupiah(deposit)}</small></div>
-              <p className="form-note">Data ini digunakan untuk mengelola booking dan disimpan di Supabase. Pembayaran melalui QRIS; booking menunggu konfirmasi ketersediaan dari admin.</p>
-              <button className="button button-dark full-button" type="submit" disabled={busy || cart.length === 0}>{busy ? "Menyiapkan QRIS…" : "Buat QRIS & bayar DP"}<span>↗</span></button>
+              <div className="estimate"><span>Estimasi total sewa</span><strong>{rupiah(total)}</strong><small>Belum termasuk biaya lain yang mungkin dikonfirmasi admin.</small></div>
+              <p className="form-note">Data ini digunakan untuk mengelola booking dan disimpan di Supabase. Admin akan mengonfirmasi ketersediaan alat dan pembayaran lewat WhatsApp.</p>
+              <button className="button button-dark full-button" type="submit" disabled={busy || cart.length === 0}>{busy ? "Menyimpan booking…" : "Simpan booking & lanjut WhatsApp"}<span>↗</span></button>
             </form>
           </>}
         </aside>

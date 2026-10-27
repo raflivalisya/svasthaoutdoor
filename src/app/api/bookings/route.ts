@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { products } from "@/lib/catalog";
 import { getSupabaseAdmin } from "@/lib/supabase-admin";
-import { midtransApiUrl, midtransAuthorization } from "@/lib/midtrans";
 
 export const runtime = "nodejs";
 
@@ -65,14 +64,11 @@ export async function POST(request: Request) {
   }
 
   const total = lineItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0) * days;
-  const deposit = Math.ceil(total / 2);
-  const orderId = `SO-${crypto.randomUUID().replaceAll("-", "").slice(0, 20)}`;
+  const reference = `SO-${crypto.randomUUID().replaceAll("-", "").slice(0, 12).toUpperCase()}`;
 
   try {
-    const authorization = midtransAuthorization();
-    const supabase = getSupabaseAdmin();
-    const { error: insertError } = await supabase.from("bookings").insert({
-      midtrans_order_id: orderId,
+    const { error } = await getSupabaseAdmin().from("bookings").insert({
+      booking_reference: reference,
       customer_info: customer,
       pickup_location: location,
       pickup_date: date,
@@ -80,52 +76,44 @@ export async function POST(request: Request) {
       rental_days: days,
       line_items: lineItems,
       total_amount: total,
-      deposit_amount: deposit,
+      booking_status: "pending_admin_confirmation",
     });
-    if (insertError) throw new Error("Booking belum tersimpan. Pastikan schema Supabase sudah diterapkan.");
+    if (error) throw new Error("Booking belum tersimpan. Pastikan schema Supabase sudah diterapkan.");
 
-    const firstAndLast = customer.name.split(/\s+/);
-    const firstName = firstAndLast.shift() || customer.name;
-    const lastName = firstAndLast.join(" ");
-    const midtransResponse = await fetch(midtransApiUrl("/v2/charge"), {
-      method: "POST",
-      headers: {
-        Authorization: authorization,
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      signal: AbortSignal.timeout(15000),
-      body: JSON.stringify({
-        payment_type: "qris",
-        transaction_details: { order_id: orderId, gross_amount: deposit },
-        item_details: [{ id: "booking-deposit", price: deposit, quantity: 1, name: `DP sewa Svastha (${days} hari)` }],
-        customer_details: {
-          first_name: firstName,
-          ...(lastName ? { last_name: lastName } : {}),
-          ...(customer.email ? { email: customer.email } : {}),
-          phone: customer.phone,
-        },
-        qris: { acquirer: "gopay" },
-      }),
-    });
-    const payment = await midtransResponse.json();
-    if (!midtransResponse.ok || !payment.transaction_id) {
-      await supabase.from("bookings").update({ payment_status: "failed", booking_status: "payment_failed" }).eq("midtrans_order_id", orderId);
-      return NextResponse.json({ error: "Midtrans belum dapat membuat QRIS. Coba lagi atau hubungi admin." }, { status: 502 });
-    }
+    const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6285835484908";
+    const list = lineItems.map((item) =>
+      `- ${item.name}${item.size ? ` (Ukuran ${item.size})` : ""} x${item.quantity} · Rp ${(item.unitPrice * item.quantity * days).toLocaleString("id-ID")}`,
+    ).join("\n");
+    const message = [
+      "FORM SEWA SVASTHA OUTDOOR",
+      `ID booking: ${reference}`,
+      "",
+      `Nama: ${customer.name}`,
+      `WhatsApp: ${customer.phone}`,
+      ...(customer.email ? [`Email: ${customer.email}`] : []),
+      `Pengambilan: ${location}`,
+      `Tanggal: ${date} · ${time}`,
+      `Durasi: ${days} hari`,
+      `Alamat: ${customer.address}`,
+      ...(customer.social ? [`Sosial media: ${customer.social}`] : []),
+      "",
+      "Daftar alat:",
+      list,
+      "",
+      `TOTAL ESTIMASI: Rp ${total.toLocaleString("id-ID")}`,
+      "Mohon konfirmasi ketersediaan alat dan informasi pembayaran.",
+    ].join("\n");
 
-    const { error: updateError } = await supabase.from("bookings").update({
-      midtrans_transaction_id: payment.transaction_id,
-      payment_type: payment.payment_type || "qris",
-    }).eq("midtrans_order_id", orderId);
-    if (updateError) throw new Error("QRIS dibuat, tetapi status booking belum tersimpan. Hubungi admin sebelum mencoba membayar ulang.");
-
-    return NextResponse.json({ orderId, total, deposit }, { status: 201 });
+    return NextResponse.json({
+      reference,
+      total,
+      whatsappUrl: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`,
+    }, { status: 201 });
   } catch (cause) {
     console.error("Booking creation failed:", cause);
     const message = cause instanceof Error && cause.message.includes("belum tersimpan")
       ? cause.message
-      : "Booking belum dapat dibuat. Periksa konfigurasi server lalu coba lagi.";
+      : "Booking belum dapat dibuat. Periksa konfigurasi Supabase lalu coba lagi.";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
