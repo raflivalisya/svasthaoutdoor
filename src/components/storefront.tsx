@@ -200,7 +200,7 @@ export default function Storefront() {
       </main>
 
       <footer className="site-footer"><a className="brand brand-footer" href="#home"><span className="brand-mark">S</span><span>SVASTHA<span className="brand-accent">OUTDOOR</span><small>RENTAL GEAR · LAMPUNG</small></span></a>
-        <p>Perjalanan baik dimulai dari persiapan yang baik.</p><span>© {new Date().getFullYear()} Svastha Outdoor</span></footer>
+        <p>Perjalanan baik dimulai dari persiapan yang baik.</p><span className="footer-links"><a href="/admin">Panel admin</a><span>© {new Date().getFullYear()} Svastha Outdoor</span></span></footer>
 
       {drawerOpen && <div className="drawer-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setDrawerOpen(false); }}>
         <aside className="booking-drawer" role="dialog" aria-modal="true" aria-label="Keranjang dan formulir penyewaan">

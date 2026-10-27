@@ -15,8 +15,12 @@ Palet warna dan bentuk utama dapat disesuaikan dari token di bagian `:root` pada
 ## Konfigurasi
 
 - `NEXT_PUBLIC_SUPABASE_URL`: URL project Supabase.
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: publishable key untuk Supabase Auth di halaman admin.
 - `SUPABASE_SERVICE_ROLE_KEY`: secret/service-role key Supabase. Hanya dipakai oleh route server; jangan beri prefix `NEXT_PUBLIC_` atau commit nilainya.
 - `NEXT_PUBLIC_WHATSAPP_NUMBER`: nomor admin internasional tanpa tanda `+`.
+- `ADMIN_EMAILS`: daftar email admin yang diizinkan, dipisahkan koma. Buat akun email/password melalui Supabase Auth; dashboard tidak menyediakan pendaftaran publik.
+
+Buka dashboard lokal di `/admin`. Buat akun admin dari Supabase Dashboard → Authentication → Users, lalu masukkan emailnya ke `ADMIN_EMAILS`. Login memakai sesi cookie Supabase; API admin memverifikasi akun dan allowlist sebelum membaca data pelanggan atau mengubah status booking.
 
 ## Alur booking
 
